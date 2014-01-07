@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>Galleon.jpg</file>
+        <file>Schooner.jpg</file>
+        <file>other_ship.jpg</file>
+        <file>War Galleon.jpg</file>
+        <file>open.png</file>
+        <file>Exit.png</file>
+        <file>New.jpg</file>
+        <file>Cannons.jpg</file>
+        <file>Contraband.jpg</file>
+        <file>Fruit.jpg</file>
+        <file>Spices.jpg</file>
+        <file>Tea.jpg</file>
+        <file>Textiles.jpg</file>
+        <file>Crew.jpg</file>
+        <file>Cannon_unequipped.png</file>
+        <file>Flying Dutchman.jpg</file>
+    </qresource>
+</RCC>
