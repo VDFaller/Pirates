@@ -202,6 +202,7 @@ class Player:
             cost = self.crew.price * self.crew.number
             if self.money > cost:
                 self.change_money("down", cost, window)
+                window.textBrowser.append("Paid Crew ${}".format(cost))
                 self.crew.attitude = min(self.crew.attitude + .5, 100)
             else:
                 self.crew.attitude = max(self.crew.attitude - 5, 0)
@@ -280,8 +281,13 @@ class Port:
     def change_prices(self):
         """Changes the prices in the port based on current prices of the port"""
         for i in self.price:
-            self.price[i] = math.floor(random.gauss(self.price[i],
+            new_price = math.floor(random.gauss(self.price[i],
                 Config.port_prices[i][1]))
+            if new_price > Config.port_prices[i][4]:
+                new_price = Config.port_prices[i][4]
+            elif new_price < Config.port_prices[i][3]:
+                new_price = Config.port_prices[i][3]
+            self.price[i] = new_price
         self.sell_price = deepcopy(self.price)
         for i in self.sell_price:
             self.sell_price[i] = math.floor(self.price[i] *

@@ -17,6 +17,7 @@ class MainWindow(QtWidgets.QMainWindow, UI.MainUI.Ui_MainWindow):
         aren't created yet)"""
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle("Faller's a Pirate")
         self.btn_hire_crew.clicked.connect(
             lambda: self.game.current_player.hire_crew(self))
         self.btn_fire_crew.clicked.connect(
@@ -199,13 +200,14 @@ class Game(object):
 
 class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
     """The Dialog for initiation"""
-    def __init__(self, player, window, trade):
+    def __init__(self, player, window, trade, p2=None):
         """Just initiate"""
         super().__init__()
         self.window = window
         self.player = player
         self.setupUi(self)
         self.trade = trade
+        self.p2 = p2
         # initiates all the buttons and sets up buy/sell prices
         for i in Config.port_prices:
             up = getattr(self, "btn_" + i + "_up")
@@ -215,14 +217,17 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
             add_price = getattr(self, "H_" + i)
             if trade == "buy":
                 add_price.setText(i +
-                    " (" + str(self.player.port.price[i]) + ")")
+                    " ($" + str(self.player.port.price[i]) + ")")
             elif trade == "sell":
                 add_price.setText(i +
-                    " (" + str(self.player.port.sell_price[i]) + ")")
+                    " ($" + str(self.player.port.sell_price[i]) + ")")
+            elif trade == "Pirate":
+                add_price.setText(i +
+                    " (" + str(p2.ship.cargo[i]) + ")")
         self.buttonBox.accepted.connect(
             partial(self.accept_, self.player, self.window))
 
-    def count_cargo(self, player):
+    def count_cargo(self):
         """counts total cargo selected as well as on ship"""
         want = int(self.V_Cannons.text()) + \
             int(self.V_Contraband.text()) + \
@@ -230,25 +235,45 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
             int(self.V_Fruit.text()) + \
             int(self.V_Textiles.text()) + \
             int(self.V_Tea.text())
-        have = sum(player.ship.cargo.values())
+        have = sum(self.player.ship.cargo.values())
         cargo = want + have
         return cargo
 
     def up(self, item):
         """makes selects direction of button with some error checking"""
-        total_cargo = self.count_cargo(self.player)
+        total_cargo = self.count_cargo()
         total_cost = int(self.V_Total.text())
         label = getattr(self, "V_" + str(item))
         current = int(label.text())
+        #conditional for buy
         if self.trade == "buy":
             price = self.player.port.price[item]
-            okaygo = total_cargo < self.player.ship.max_cargo
-            no_str = "That's max cargo"
+            if total_cargo + 1 > self.player.ship.max_cargo:
+                okaygo = False
+                no_str = "That's max cargo"
+            elif total_cost + price > self.player.money:
+                okaygo = False
+                no_str = "You have no more money"
+            else:
+                okaygo = True
+        #conditional for sell
         elif self.trade == "sell":
             price = self.player.port.sell_price[item]
             #just to make sure you have enough 'item' to sell
             okaygo = self.player.ship.cargo[item] > current
             no_str = "You have no more to sell"
+        #Much weirder
+        elif self.trade == "Pirate":
+            price = 0
+            if total_cargo + 1 > self.player.ship.max_cargo:
+                okaygo = False
+                no_str = "That's max cargo"
+            elif current >= self.p2.ship.cargo[item]:
+                okaygo = False
+                no_str = "That's all they have"
+            else:
+                okaygo = True
+
         if  okaygo:
             label.setNum(current + 1)
             self.V_Total.setNum(total_cost + price)
@@ -263,6 +288,8 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
             price = self.player.port.price[item]
         elif self.trade == "sell":
             price = self.player.port.sell_price[item]
+        elif self.trade == "Pirate":
+            price = 0
         current = int(label.text())
         if current > 0:
             label.setNum(current - 1)
@@ -271,23 +298,25 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
     def accept_(self, player, window):
         """checks for enough money and buys/sells"""
         if self.trade == "buy":
-            if int(self.V_Total.text()) <= player.money:
-                for i in player.ship.cargo:
-                    num = int(getattr(self, "V_" + i).text())
-                    player.ship.cargo[i] += num
-                window.to_pe()
-                player.change_money("down",
-                    int(self.V_Total.text()), window)
-                self.close()
-            else:
-                window.textBrowser.append("Go get more moolah")
-        if self.trade == "sell":
+            for i in player.ship.cargo:
+                num = int(getattr(self, "V_" + i).text())
+                player.ship.cargo[i] += num
+            window.to_pe()
+            player.change_money("down",
+                int(self.V_Total.text()), window)
+            self.close()
+        elif self.trade == "sell":
             for i in player.ship.cargo:
                 num = int(getattr(self, "V_" + i).text())
                 player.ship.cargo[i] -= num
             player.change_money("up", int(self.V_Total.text()), window)
             window.to_pe()
             self.close()
+        elif self.trade == "Pirate":
+        #Pirates the number with no money exchange
+            for i in player.ship.cargo:
+                num = int(getattr(self, "V_" + i).text())
+                player.ship.cargo[i] += num
 
 
 class Battle(object):
@@ -363,7 +392,8 @@ class Battle(object):
         """Attempt to board"""
         if attacker.ship.health / attackee.ship.health > 1.5:
             window.textBrowser.append("You successfully boarded")
-            self.pirate_cargo(attacker, attackee, window)
+            dia = Cargo_UI(attacker, window, "Pirate", attackee)
+            dia.show()
             window.game.myturn = False
         else:
             window.textBrowser.append("You can't board")

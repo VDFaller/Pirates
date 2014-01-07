@@ -1,4 +1,4 @@
-Cargo = ["Spices", "Cannons", "Tea", "Contraband", "Fruit", "Textiles"]
+cargo = ["Spices", "Cannons", "Tea", "Contraband", "Fruit", "Textiles"]
 
 upgrade_items = {
     1: [["Iron Hull", "Damage Reduction +.05, Speed -1", 1000],
@@ -21,13 +21,13 @@ ship_type = {
 
 
 port_prices = {
-    # initial, mu, sell_price
-    "Spices": [30, 3, .8],
-    "Cannons": [100, 10, .8],
-    "Tea": [40, 5, .8],
-    "Contraband": [400, 40, .8],
-    "Fruit": [60, 8, .8],
-    "Textiles": [40, 5, .8]
+    # initial, mu, sell price coefficient, min, max
+    "Spices": [30, 3, .8, 10, 60],
+    "Cannons": [100, 10, .8, 30, 200],
+    "Tea": [40, 5, .8, 10, 80],
+    "Contraband": [400, 40, .8, 200, 800],
+    "Fruit": [60, 8, .8, 20, 120],
+    "Textiles": [40, 5, .8, 4, 65]
 }
 
 list_ports = ["Barbados", "Bermuda", "Bahamas", "Tortuga"]
