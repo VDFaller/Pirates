@@ -1,10 +1,14 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
+#The symbol for your money = "\u06de"
+from PyQt5 import QtGui, QtWidgets  # ,QtCore
 import sys
 import UI.MainUI
 import Logic
 import Config
 import random
+import tkinter
+import tkinter.filedialog
 import shelve
+import pickle
 import time
 import UI.Buy_Cargo
 from functools import partial
@@ -17,7 +21,6 @@ class MainWindow(QtWidgets.QMainWindow, UI.MainUI.Ui_MainWindow):
         aren't created yet)"""
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
-        self.setWindowTitle("Faller's a Pirate")
         self.btn_hire_crew.clicked.connect(
             lambda: self.game.current_player.hire_crew(self))
         self.btn_fire_crew.clicked.connect(
@@ -112,90 +115,25 @@ class MainWindow(QtWidgets.QMainWindow, UI.MainUI.Ui_MainWindow):
         self.game.play(self)
 
     def save_game(self):
-        """DOESN'T SAVE"""
-        saved = shelve.open("saves/the_only")
-        saved["Game_var"] = self.game
-        saved.close()
+        """Does SAVE"""
+        #saved = shelve.open("saves/the_only")
+        #saved["Game_var"] = self.game
+        #saved.close()
+        with open("Savegame", "wb") as f:
+            pickle.dump(self.game, f)
 
     def load_game(self):
         """DOESN'T LOAD"""
-        saved = shelve.open("saves/the_only")
-        self.game = saved["Game_var"]
-        saved.close()
+        #saved = shelve.open("saves/the_only")
+        #self.game = saved["Game_var"]
+        #saved.close()
+        root = tkinter.Tk()
+        root.withdraw()
+        filepath = tkinter.filedialog.askopenfilename()
+        with open(filepath, "rb") as f:
+            self.game = pickle.load(f)
         self.stackedWidget.setCurrentIndex(1)
-
-
-class Game(object):
-    """The Game Class"""
-    def __init__(self, window):
-        """The Obvious"""
-        self.window = window
-        self.makeshitgo = True
-        super(Game, self).__init__()
-        self.turn = 1
-        self.num_players = 1
-        """Makes ports and players"""
-        self.ports = Logic.instance_ports(Config.list_ports)
-        self.players = Logic.initiate_players(self.num_players,
-            self.ports, window)
-        self.npc = [Logic.Player("Galleon",
-            Logic.Port("Bermuda"), "Blackbeard")]
-        window.InfoBar.show()
-
-    def play(self, window):
-        """starts the game"""
-        while self.makeshitgo:
-            for i in self.ports:
-                self.ports[i].change_prices()
-            window.textBrowser.append("Turn {}".format(self.turn))
-            for i in self.players:
-                window.to_pier()
-                self.myturn = True
-                i.pay_crew(window)
-                self.current_player = i
-                window.stackedWidget.setCurrentIndex(1)
-                window.Welcome.setText("Welcome to {}".format(i.port.name))
-                if i.turn_loss > 0:
-                    self.textBrowser.append("You still have {} turns to wait"
-                        .format(i.turn_loss))
-                    i.turn_loss -= 1
-                    self.myturn = False
-                elif i.ship.name is None:
-                    i.buy_ship(window)
-                while self.myturn:
-                    QtWidgets.qApp.processEvents()
-                    self.current_player.update_cargo(window)
-                    time.sleep(.05)
-            self.turn += 1
-
-    def sail(self, window):
-        """Ends turn and Goes somewhere else,
-        percent chance for random encounter"""
-        self.current_player.port = self.ports[random.choice(Config.list_ports)]
-        p2 = self.npc[0]
-        if random.random() > .8:  # 20% Chance to fight
-            self.battle = Battle(self.current_player, p2, window)
-        else:
-            self.myturn = False
-
-    def mutiny(player):
-        """Has the crew mutiny against you and throw you off your ship"""
-        print("Oh shit, the crew is mutinying")
-        print("I guess you're fucked.")
-        player.ship = Logic.Ship(None)
-
-    def trade_ships(p1, p2):
-        """I want to take the ship and as much cargo as I can hold then give
-        the other player my current ship"""
-        """Fix this"""
-        temp_ship = p1.ship
-        temp_inv = [p1.ship.cannons, p1.ship.cargo]
-        temp2_inv = [p2.ship.cannons, p2.ship.cargo]
-        p1.ship = p2.ship
-        p1.ship.cannons, p1.ship.cargo = temp_inv
-        p2.ship = temp_ship
-        p2.ship.cannons, p2.ship.cargo = temp2_inv
-        return True
+        self.textBrowser.append("Turn {}".format(self.game.turn))
 
 
 class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
@@ -208,6 +146,12 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
         self.setupUi(self)
         self.trade = trade
         self.p2 = p2
+        if trade == "buy":
+            self.setWindowTitle("Buy Cargo")
+        elif trade == "sell":
+            self.setWindowTitle("Sell Cargo")
+        elif trade == "Pirate":
+            self.setWindowTitle("Pillage Cargo")
         # initiates all the buttons and sets up buy/sell prices
         for i in Config.port_prices:
             up = getattr(self, "btn_" + i + "_up")
@@ -217,10 +161,10 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
             add_price = getattr(self, "H_" + i)
             if trade == "buy":
                 add_price.setText(i +
-                    " ($" + str(self.player.port.price[i]) + ")")
+                    " (\u06de" + str(self.player.port.price[i]) + ")")
             elif trade == "sell":
                 add_price.setText(i +
-                    " ($" + str(self.player.port.sell_price[i]) + ")")
+                    " (\u06de" + str(self.player.port.sell_price[i]) + ")")
             elif trade == "Pirate":
                 add_price.setText(i +
                     " (" + str(p2.ship.cargo[i]) + ")")
@@ -317,6 +261,79 @@ class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
             for i in player.ship.cargo:
                 num = int(getattr(self, "V_" + i).text())
                 player.ship.cargo[i] += num
+
+
+class Game(object):
+    """The Game Class"""
+    def __init__(self, window):
+        """The Obvious"""
+        self.window = window
+        self.makeshitgo = True
+        super(Game, self).__init__()
+        self.turn = 1
+        self.num_players = 1
+        """Makes ports and players"""
+        self.ports = Logic.instance_ports(Config.list_ports)
+        self.players = Logic.initiate_players(self.num_players,
+            self.ports, window)
+        self.npc = [Logic.Player("Galleon",
+            Logic.Port("Bermuda"), "Blackbeard")]
+        window.InfoBar.show()
+
+    def play(self, window):
+        """starts the game"""
+        while self.makeshitgo:
+            for i in self.ports:
+                self.ports[i].change_prices()
+            window.textBrowser.append("Turn {}".format(self.turn))
+            for i in self.players:
+                window.to_pier()
+                self.myturn = True
+                i.pay_crew(window)
+                self.current_player = i
+                window.stackedWidget.setCurrentIndex(1)
+                window.Welcome.setText("Welcome to {}".format(i.port.name))
+                if i.turn_loss > 0:
+                    self.textBrowser.append("You still have {} turns to wait"
+                        .format(i.turn_loss))
+                    i.turn_loss -= 1
+                    self.myturn = False
+                elif i.ship.name is None:
+                    i.buy_ship(window)
+                while self.myturn:
+                    QtWidgets.qApp.processEvents()
+                    self.current_player.update_cargo(window)
+                    time.sleep(.05)
+            self.turn += 1
+
+    def sail(self, window):
+        """Ends turn and Goes somewhere else,
+        percent chance for random encounter"""
+        self.current_player.port = self.ports[random.choice(Config.list_ports)]
+        p2 = self.npc[0]
+        if random.random() > .8:  # 20% Chance to fight
+            self.battle = Battle(self.current_player, p2, window)
+        else:
+            self.myturn = False
+
+    def mutiny(player):
+        """Has the crew mutiny against you and throw you off your ship"""
+        print("Oh shit, the crew is mutinying")
+        print("I guess you're fucked.")
+        player.ship = Logic.Ship(None)
+
+    def trade_ships(p1, p2):
+        """I want to take the ship and as much cargo as I can hold then give
+        the other player my current ship"""
+        """Fix this"""
+        temp_ship = p1.ship
+        temp_inv = [p1.ship.cannons, p1.ship.cargo]
+        temp2_inv = [p2.ship.cannons, p2.ship.cargo]
+        p1.ship = p2.ship
+        p1.ship.cannons, p1.ship.cargo = temp_inv
+        p2.ship = temp_ship
+        p2.ship.cannons, p2.ship.cargo = temp2_inv
+        return True
 
 
 class Battle(object):

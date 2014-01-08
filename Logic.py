@@ -1,3 +1,4 @@
+#All of the Game Logic and main character classes are in here
 import random
 import math
 import Config

@@ -37,7 +37,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Name your Captain"))
         self.lineEdit.setPlaceholderText(_translate("Dialog", "Please choose a name for your captain"))
         self.label.setText(_translate("Dialog", "TextLabel"))
 

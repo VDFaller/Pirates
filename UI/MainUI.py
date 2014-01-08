@@ -568,7 +568,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Faller's a Pirate"))
         self.Player_Name.setText(_translate("MainWindow", "Name"))
         self.Eq_Cannons.setText(_translate("MainWindow", "0"))
         self.Crew.setText(_translate("MainWindow", "0"))
@@ -578,7 +578,7 @@ class Ui_MainWindow(object):
         self.Spices.setText(_translate("MainWindow", "0"))
         self.Tea.setText(_translate("MainWindow", "0"))
         self.Textiles.setText(_translate("MainWindow", "0"))
-        self.H_Money.setText(_translate("MainWindow", "Money"))
+        self.H_Money.setText(_translate("MainWindow", "\u06de"))
         self.V_Money.setText(_translate("MainWindow", "0"))
         self.label.setText(_translate("MainWindow", "Faller is the best at \n"
 "making shitty games.\n"
