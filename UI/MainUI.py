@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainUI.ui'
 #
-# Created: Wed Mar 19 02:03:22 2014
+# Created: Wed Mar 19 02:41:15 2014
 #      by: PyQt5 UI code generator 5.1.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -178,7 +178,7 @@ class Ui_MainWindow(object):
         self.Health = QtWidgets.QLabel(self.InfoBar)
         self.Health.setObjectName("Health")
         self.horizontalLayout_3.addWidget(self.Health)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem3)
         self.H_Money = QtWidgets.QLabel(self.InfoBar)
         self.H_Money.setObjectName("H_Money")
@@ -208,6 +208,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(36)
         self.label.setFont(font)
+        self.label.setScaledContents(False)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.gridLayout_7.addWidget(self.label, 2, 0, 1, 1)
@@ -600,11 +601,11 @@ class Ui_MainWindow(object):
         self.Tea.setText(_translate("MainWindow", "0"))
         self.Textiles.setText(_translate("MainWindow", "0"))
         self.Health.setText(_translate("MainWindow", "0/0"))
-        self.H_Money.setText(_translate("MainWindow", "Money"))
+        self.H_Money.setText(_translate("MainWindow", "\u06de"))
         self.V_Money.setText(_translate("MainWindow", "0"))
-        self.label.setText(_translate("MainWindow", "Faller is the best at \n"
-"making shitty games.\n"
-"Press New Game"))
+        self.label.setText(_translate("MainWindow", "Faller\'s the best at \n"
+"making shitty games\n"
+"Press Ctrl+N"))
         self.Welcome.setText(_translate("MainWindow", "Welcome to {}"))
         self.btn_to_shipyard.setText(_translate("MainWindow", "Head to Shipyard"))
         self.btn_to_pe.setText(_translate("MainWindow", "Head to Pirate Emporium"))

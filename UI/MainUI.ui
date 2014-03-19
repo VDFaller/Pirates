@@ -385,12 +385,12 @@
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>10</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -432,9 +432,9 @@
       <zorder>H_Money</zorder>
       <zorder>V_Money</zorder>
       <zorder>horizontalSpacer</zorder>
+      <zorder>Icon_Health</zorder>
       <zorder>Health</zorder>
       <zorder>horizontalSpacer_4</zorder>
-      <zorder>Icon_Health</zorder>
      </widget>
     </item>
     <item>
@@ -471,9 +471,12 @@
             </font>
            </property>
            <property name="text">
-            <string>Faller is the best at 
-making shitty games.
-Press New Game</string>
+            <string>Faller's the best at 
+making shitty games
+Press Ctrl+N</string>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
