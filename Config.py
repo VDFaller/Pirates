@@ -19,9 +19,41 @@ ship_type = {
     "Flying Dutchman": [140000, 100, 1400, 250, 140, 140, .42]
 }
 
+new_port = {
+    #Name: [Generation Dictionary, Demand Dictionary, Coordinates]
+    "Barbados": [
+        {"Cannons":100, "Contraband":2, "Fruit":500,
+            "Textiles":300, "Tea":400, "Spices":80},
+        {"Cannons":100, "Contraband":100, "Fruit":100,
+            "Textiles":100, "Tea":100, "Spices":100},
+        [13.1667, 59.5500]
+    ],
+    "Bermuda": [
+        {"Cannons":100, "Contraband":100, "Fruit":100,
+            "Textiles":100, "Tea":100, "Spices":100},
+        {"Cannons":100, "Contraband":100, "Fruit":100,
+            "Textiles":100, "Tea":100, "Spices":100},
+        [32.3333, 64.7500]
+    ],
+    "Bahamas": [
+        {"Cannons":10, "Contraband":80, "Fruit":50,
+            "Textiles":200, "Tea":50, "Spices":150},
+        {"Cannons":100, "Contraband":100, "Fruit":100,
+            "Textiles":100, "Tea":100, "Spices":100},
+        [23.9167, 77.6667]
+    ],
+    "Tortuga": [
+        {"Cannons":300, "Contraband":400, "Fruit":30,
+            "Textiles":20, "Tea":10, "Spices":40},
+        {"Cannons":100, "Contraband":100, "Fruit":100,
+            "Textiles":100, "Tea":100, "Spices":100},
+        [10.9317, 65.3081]
+    ],
+
+}
 
 port_prices = {
-    # initial, mu, sell price coefficient, min, max
+    # Initial, sigma, sell price coefficient, min, max
     "Spices": [30, 3, .8, 10, 60],
     "Cannons": [100, 10, .8, 30, 200],
     "Tea": [40, 5, .8, 10, 80],

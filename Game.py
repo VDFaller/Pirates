@@ -1,5 +1,6 @@
 #The symbol for your money = "\u06de"
 from PyQt5 import QtGui, QtWidgets  # ,QtCore
+import pdb
 import sys
 import UI.MainUI
 import Logic
@@ -131,9 +132,38 @@ class MainWindow(QtWidgets.QMainWindow, UI.MainUI.Ui_MainWindow):
         root.withdraw()
         filepath = tkinter.filedialog.askopenfilename()
         with open(filepath, "rb") as f:
+            pdb.set_trace()
             self.game = pickle.load(f)
         self.stackedWidget.setCurrentIndex(1)
         self.textBrowser.append("Turn {}".format(self.game.turn))
+
+    def aStar(self, graph, current, end):
+        """Pathfinding algorithm"""
+        openList = set()
+        closedList = set()
+        path = []
+
+        def retracePath(c):
+            """helps go back"""
+            path.insert(0, c)
+            if c.parent is None:
+                return
+            retracePath(c.parent)
+
+        openList.append(current)
+        while openList:
+            current = min(openList, key=lambda inst: inst.H)
+            if current == end:
+                return retracePath(current)
+            openList.remove(current)
+            closedList.append(current)
+            for tile in graph[current]:
+                if tile not in closedList:
+                    tile.H = (abs(end.x - tile.x) + abs(end.y - tile.y)) * 10
+                    if tile not in openList:
+                        openList.append(tile)
+                    tile.parent = current
+        return path
 
 
 class Cargo_UI(QtWidgets.QDialog, UI.Buy_Cargo.Ui_Dialog):
@@ -267,9 +297,9 @@ class Game(object):
     """The Game Class"""
     def __init__(self, window):
         """The Obvious"""
+        super(Game, self).__init__()
         self.window = window
         self.makeshitgo = True
-        super(Game, self).__init__()
         self.turn = 1
         self.num_players = 1
         """Makes ports and players"""

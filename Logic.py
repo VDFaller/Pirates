@@ -48,9 +48,10 @@ def instance_ports(port_list):
     return port_dict
 
 
-class Ship:
+class Ship():
     """Ship with all the fun"""
     def __init__(self, name):
+        super(Ship, self).__init__()
         self.name = name
         self.cost = Config.ship_type[name][0]
         self.max_cargo = Config.ship_type[name][2]
@@ -125,6 +126,7 @@ class Ship:
 class Player:
     def __init__(self, ship, port, name):
         """Starts the player off with 0 everything and 5000 deblunes"""
+        super(Player, self).__init__()
         self.name = name
         if self.name in ["Hollinger", "Dan", "Daniel", "Quadratix", "Quad"]:
             print("Hollinger, you sir are a douche")
@@ -167,6 +169,8 @@ class Player:
         window.Crew.setNum(self.crew.number)
         window.V_Money.setNum(self.money)
         window.Eq_Cannons.setNum(self.ship.cannons)
+        window.Health.setText(str(self.ship.health) +
+            "/" + str(self.ship.max_health))
 
     def buy_upgrade(self):  # old
         """Selects an upgrade, checks money then runs upgrade_ship"""
@@ -189,7 +193,7 @@ class Player:
     def hire_crew(self, window):  # basic
         self.crew.number = self.ship.max_crew
         self.crew.price = self.port.crew_price
-        window.textBrowser.append("{} hired at ${}/day".format(
+        window.textBrowser.append("{} hired at \u06de{}/day".format(
             self.crew.number, self.crew.price))
 
     def fire_crew(self, window):  # basic
@@ -203,7 +207,7 @@ class Player:
             cost = self.crew.price * self.crew.number
             if self.money > cost:
                 self.change_money("down", cost, window)
-                window.textBrowser.append("Paid Crew ${}".format(cost))
+                window.textBrowser.append("Paid Crew \u06de{}".format(cost))
                 self.crew.attitude = min(self.crew.attitude + .5, 100)
             else:
                 self.crew.attitude = max(self.crew.attitude - 5, 0)
@@ -226,10 +230,13 @@ class Player:
             window.textBrowser.append("You should sell some cargo first")
         else:
             temp = self.ship
-            self.ship = Ship(window.H_Ship_Name.text())
+            new = window.H_Ship_Name.text()
+            self.ship = Ship(new)
             self.ship.cargo = temp.cargo
             self.change_money("down", self.ship.cost, window)
             window.textBrowser.append(self.ship.name)
+            window.Icon_Health.setPixmap(
+                QtGui.QPixmap(":/icons/" + new + ".jpg"))
             window.to_shipyard()
 
     def cancel_purchase_ship(self, window):
@@ -260,10 +267,20 @@ class Player:
 
 class Port:
     """Where all the port prices are kept"""
+    """For a pricing system we need:
+        generation (slightly variable)
+        demand (slightly variable)
+        coordinates (fixed)
+        could I just make shipping lanes?
+    """
     def __init__(self, name):
+        super(Port, self).__init__()
         self.name = name
         self.price, self.sell_price, self.crew_price = self.make_prices()
         self.owner = None
+        self.generation = Config.new_port[name][0]
+        self.demand = Config.new_port[name][1]
+        self.coordinates = Config.new_port[name][2]
 
     def make_prices(self):
         """creates the prices when the port is initiated"""
@@ -300,6 +317,7 @@ class Port:
 class Crew:
     #If I want crew to be more than just a number
     def __init__(self):
+        super(Crew, self).__init__()
         self.number = 0
         self.attitude = 70
         self.accuracy = 20

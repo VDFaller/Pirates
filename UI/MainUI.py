@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'MainUI.ui'
+#
+# Created: Wed Mar 19 02:03:22 2014
+#      by: PyQt5 UI code generator 5.1.1
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
@@ -159,6 +168,18 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.Textiles)
         spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
+        self.Icon_Health = QtWidgets.QLabel(self.InfoBar)
+        self.Icon_Health.setMaximumSize(QtCore.QSize(20, 20))
+        self.Icon_Health.setText("")
+        self.Icon_Health.setPixmap(QtGui.QPixmap(":/icons/Raft.jpg"))
+        self.Icon_Health.setScaledContents(True)
+        self.Icon_Health.setObjectName("Icon_Health")
+        self.horizontalLayout_3.addWidget(self.Icon_Health)
+        self.Health = QtWidgets.QLabel(self.InfoBar)
+        self.Health.setObjectName("Health")
+        self.horizontalLayout_3.addWidget(self.Health)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem3)
         self.H_Money = QtWidgets.QLabel(self.InfoBar)
         self.H_Money.setObjectName("H_Money")
         self.horizontalLayout_3.addWidget(self.H_Money)
@@ -568,7 +589,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Faller's a Pirate"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.Player_Name.setText(_translate("MainWindow", "Name"))
         self.Eq_Cannons.setText(_translate("MainWindow", "0"))
         self.Crew.setText(_translate("MainWindow", "0"))
@@ -578,7 +599,8 @@ class Ui_MainWindow(object):
         self.Spices.setText(_translate("MainWindow", "0"))
         self.Tea.setText(_translate("MainWindow", "0"))
         self.Textiles.setText(_translate("MainWindow", "0"))
-        self.H_Money.setText(_translate("MainWindow", "\u06de"))
+        self.Health.setText(_translate("MainWindow", "0/0"))
+        self.H_Money.setText(_translate("MainWindow", "Money"))
         self.V_Money.setText(_translate("MainWindow", "0"))
         self.label.setText(_translate("MainWindow", "Faller is the best at \n"
 "making shitty games.\n"

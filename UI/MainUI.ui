@@ -35,20 +35,11 @@
         <height>16777215</height>
        </size>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -363,6 +354,48 @@
         </spacer>
        </item>
        <item>
+        <widget class="QLabel" name="Icon_Health">
+         <property name="maximumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../Icons/icons.qrc">:/icons/Raft.jpg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="Health">
+         <property name="text">
+          <string>0/0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QLabel" name="H_Money">
          <property name="text">
           <string>Money</string>
@@ -377,8 +410,6 @@
         </widget>
        </item>
       </layout>
-      <zorder>horizontalSpacer_2</zorder>
-      <zorder>Icon_Cannons_Equipped</zorder>
       <zorder>horizontalSpacer_2</zorder>
       <zorder>Icon_Cannons_Equipped</zorder>
       <zorder>Player_Name</zorder>
@@ -401,6 +432,9 @@
       <zorder>H_Money</zorder>
       <zorder>V_Money</zorder>
       <zorder>horizontalSpacer</zorder>
+      <zorder>Health</zorder>
+      <zorder>horizontalSpacer_4</zorder>
+      <zorder>Icon_Health</zorder>
      </widget>
     </item>
     <item>
